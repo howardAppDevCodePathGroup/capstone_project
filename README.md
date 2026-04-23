@@ -1,99 +1,111 @@
 # Puzzle Picture App
 
-## 📝 App Overview
+## Table of Contents
+1. [Overview](#Overview)
+2. [Product Spec](#Product-Spec)
+3. [Wireframes](#Wireframes)
+4. [Build Progress](#Build-Progress)
+5. [Schema](#Schema)
 
+## Overview
 ### Description
-An app that creates an image from x people's journal entries and creates an AI image based on these x separate entries. The image is partitioned into x amount of pieces and one piece of the image is given to each group member. Bring them together to build the AI image.
+An app that creates an image from multiple users' journal entries using AI. The image is partitioned into pieces, and one piece is given to each group member. Members must collaborate to assemble the full AI-generated masterpiece.
 
 ### App Evaluation
-* **Category:** Social, Entertainment, Community Building
-* **Mobile:** Uniquely mobile experience utilizing push notifications, camera access for image saving, and real-time collaborative assembly.
-* **Story:** This app tells the story of how individual perspectives come together to create something meaningful.
-* **Market:** Families, Friends, Organizations, Groups, and Various Communities.
-* **Habit:** This app can be used however the collective feels it is most beneficial, likely as a daily or weekly bonding ritual.
-* **Scope:** Feature-rich with a clear path from MVP (text input and image generation) to expanded collaborative gameplay.
+- **Category:** Social / Entertainment / Mindfulness
+- **Mobile:** Uniquely mobile experience utilizing push notifications, camera access, and real-time collaborative assembly.
+- **Story:** Individual daily reflections come together to create a collective visual story.
+- **Market:** Families, friend groups, and organizations looking for a digital bonding ritual.
+- **Habit:** Designed for daily or weekly use to encourage consistent journaling.
+- **Scope:** Feature-rich, moving from basic text input to complex AI generation and collaborative gameplay.
 
----
+## Product Spec
 
-## 📋 App Spec
-
-### 1. User Stories
+### 1. User Stories (Required and Optional)
 
 **Required Must-have Stories**
-* User can register an account.
-* User can log in and log out securely.
-* User can create a group or join an existing group via invite code.
-* User can write and submit a journal entry for a group session.
-* User can view the status of all group members’ submissions.
-* User can trigger AI image generation once all entries are submitted.
-* User can receive one unique piece of the generated image.
-* User can view their assigned puzzle piece.
-* User can join a shared group view to assemble the full image.
-* User can collaborate with others to reconstruct the full image.
-* User can see the completed image once all pieces are assembled.
+- [x] User can register an account (Unit 8)
+- [x] User can log in and log out (Unit 8)
+- [ ] User can create a group or join via invite code
+- [x] User can write and submit a journal entry (Unit 8)
+- [ ] User can view the status of group submissions
+- [ ] User can trigger AI image generation
+- [ ] User can view their assigned puzzle piece
+- [ ] User can collaborate to assemble the full image
+- [ ] User can see the completed image
 
 **Optional Nice-to-have Stories**
-* User can edit or delete their journal entry before the submission deadline.
-* User can react or comment on the final image.
-* User can save or download the completed image.
-* User can view past group sessions and images (a “memory gallery”).
-* User can customize puzzle difficulty (number of pieces, shuffle level).
-* User can receive notifications when others submit entries.
-* User can choose a theme or prompt for journal entries (e.g., “childhood memory”).
-* User can remain anonymous within the group for more honest entries.
-* User can share the final image externally (social media, link, etc.).
-* User can use voice-to-text for journal entries.
-* User can see a preview hint of the full image before assembly.
-
----
+- [ ] Edit/Delete journal entries
+- [ ] Memory gallery for past sessions
+- [ ] Custom puzzle difficulty levels
+- [ ] Voice-to-text journal entries
 
 ### 2. Screen Archetypes
-
 * **Login / Sign Up Screen**
     * User can register an account and log in securely.
 * **Home Screen (Dashboard)**
     * User can view groups, create a new group, or join an existing group.
-* **Create / Join Group Screen**
-    * User can create a group or join one using an invite code.
 * **Journal Entry Screen**
     * User can write and submit a journal entry for a group session.
-* **Submission Status Screen**
-    * User can view which group members have submitted their entries.
-* **AI Image Generation Screen**
-    * User can trigger AI image generation once all entries are submitted.
-* **Puzzle Piece Screen**
-    * User can view their assigned piece of the generated image.
-* **Group Puzzle Assembly Screen**
-    * User can collaborate with others to assemble the full image.
-* **Final Image Reveal Screen**
-    * User can view the completed image once all pieces are assembled.
+* **Puzzle Piece/Assembly Screen**
+    * User can view their assigned piece and collaborate to assemble the full image.
 * **Profile Screen**
     * User can view and manage their account information.
 
----
-
 ### 3. Navigation
+**Tab Navigation** (Tab to Screen)
+* Home (Dashboard)
+* Journal
+* Puzzle
+* Profile
 
-**Tab Navigation (Tab to Screen)**
-* **Home (Dashboard):** View groups, create or join sessions.
-* **Journal:** Write and submit journal entries.
-* **Puzzle:** View your puzzle piece and access group assembly.
-* **Profile:** View and manage account information.
+**Flow Navigation** (Screen to Screen)
+* Login Screen -> Home
+* Home Screen -> Create/Join Group OR Journal Screen
+* Journal Entry -> Submission Status
+* Submission Status -> Puzzle Screen
+* Puzzle Screen -> Final Reveal
 
-**Flow Navigation (Screen to Screen)**
-* **Login Screen** -> Home
-* **Registration Screen** -> Home
-* **Home Screen (Dashboard)** -> Create / Join Group Screen OR Group Lobby
-* **Group Lobby / Session Screen** -> Journal Entry Screen OR Submission Status Screen
-* **Journal Entry Screen** -> Submission Status Screen
-* **Submission Status Screen** -> AI Image Generation Screen
-* **AI Image Generation Screen** -> Puzzle Piece Screen
-* **Puzzle Piece Screen** -> Group Puzzle Assembly Screen
-* **Group Puzzle Assembly Screen** -> Final Image Reveal Screen
-* **Final Image Reveal Screen** -> Home
+## Wireframes
+<img src="https://github.com/user-attachments/assets/29ea6da2-129c-4c68-8dda-6a6408683268" width=600>
 
 ---
 
-## 🖼️ Wireframes
-<img width="1320" height="1428" alt="figma" src="https://github.com/user-attachments/assets/29ea6da2-129c-4c68-8dda-6a6408683268" />
+## Build Progress
 
+### Unit 8: Milestone 2 (Build Sprint 1)
+- [x] Set up GitHub Project Board and Milestones
+- [x] Initialized Xcode project and Firebase authentication
+- [x] Created Login/Signup UI
+- [x] Developed basic Journal Entry View
+
+**Progress Video/GIF:**
+> [INSERT LINK TO YOUR UNIT 8 GIF/VIDEO HERE]
+
+### Unit 9: Milestone 3 (Build Sprint 2)
+- [ ] Integrate AI Image Generation API (DALL-E)
+- [ ] Implement image partitioning/slicing logic
+- [ ] Record Demo Day practice run
+
+**Demo Day Practice Video:**
+> [INSERT YOUTUBE/VIMEO LINK HERE]
+
+---
+
+## Schema 
+
+### Models
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| objectId | String | Unique id for the user post (default field) |
+| username | String | User's unique handle |
+| password | String | Hashed password for authentication |
+| journalText | String | The content of the user's daily entry |
+| groupID | Pointer | Reference to the Group model |
+
+### Networking
+- [POST] /signup - Create a new user account
+- [POST] /login - Authenticate user
+- [GET] /groups - Fetch active groups for the user
+- [POST] /journalEntry - Save a new journal entry
+- [GET] /aiImage - Fetch generated image from API
