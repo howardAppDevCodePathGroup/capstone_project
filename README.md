@@ -80,7 +80,7 @@ An app that creates an image from multiple users' journal entries using AI. The 
 - [x] Developed basic Journal Entry View
 
 **Progress Video/GIF:**
-> [INSERT LINK TO YOUR UNIT 8 GIF/VIDEO HERE]
+> []
 
 ### Unit 9: Milestone 3 (Build Sprint 2)
 - [ ] Integrate AI Image Generation API (DALL-E)
@@ -88,7 +88,7 @@ An app that creates an image from multiple users' journal entries using AI. The 
 - [ ] Record Demo Day practice run
 
 **Demo Day Practice Video:**
-> [INSERT YOUTUBE/VIMEO LINK HERE]
+> []
 
 ---
 
