@@ -1,13 +1,14 @@
 # Puzzle Picture App
 
 ## Table of Contents
-1. [Overview](#Overview)
-2. [Product Spec](#Product-Spec)
-3. [Wireframes](#Wireframes)
-4. [Build Progress](#Build-Progress)
-5. [Schema](#Schema)
+1. [Overview](#overview)
+2. [Product Spec](#product-spec)
+3. [Wireframes](#wireframes)
+4. [Build Progress](#build-progress)
+5. [Schema](#schema)
 
 ## Overview
+
 ### Description
 An app that creates an image from multiple users' journal entries using AI. The image is partitioned into pieces, and one piece is given to each group member. Members must collaborate to assemble the full AI-generated masterpiece.
 
@@ -41,33 +42,35 @@ An app that creates an image from multiple users' journal entries using AI. The 
 - [ ] Voice-to-text journal entries
 
 ### 2. Screen Archetypes
-* **Login / Sign Up Screen**
-    * User can register an account and log in securely.
-* **Home Screen (Dashboard)**
-    * User can view groups, create a new group, or join an existing group.
-* **Journal Entry Screen**
-    * User can write and submit a journal entry for a group session.
-* **Puzzle Piece/Assembly Screen**
-    * User can view their assigned piece and collaborate to assemble the full image.
-* **Profile Screen**
-    * User can view and manage their account information.
+- **Login / Sign Up Screen**
+  - User can register an account and log in securely.
+- **Home Screen (Dashboard)**
+  - User can view the main app dashboard after authentication.
+- **Groups Screen**
+  - User can view the group section for future create/join functionality.
+- **Journal Entry Screen**
+  - User can write and submit a journal entry for a group session.
+- **Profile Screen**
+  - User can view and manage account information and log out.
 
 ### 3. Navigation
+
 **Tab Navigation** (Tab to Screen)
-* Home (Dashboard)
-* Journal
-* Puzzle
-* Profile
+- Home (Dashboard)
+- Groups
+- Journal
+- Profile
 
 **Flow Navigation** (Screen to Screen)
-* Login Screen -> Home
-* Home Screen -> Create/Join Group OR Journal Screen
-* Journal Entry -> Submission Status
-* Submission Status -> Puzzle Screen
-* Puzzle Screen -> Final Reveal
+- Login Screen -> Home
+- Sign Up Screen -> Home
+- Home Screen -> Groups or Journal
+- Journal Entry Screen -> Submitted Journal State
+- Profile Screen -> Log Out -> Login Screen
 
 ## Wireframes
-<img src="https://github.com/user-attachments/assets/29ea6da2-129c-4c68-8dda-6a6408683268" width=600>
+
+<img src="https://github.com/user-attachments/assets/29ea6da2-129c-4c68-8dda-6a6408683268" width="600">
 
 ---
 
@@ -75,26 +78,28 @@ An app that creates an image from multiple users' journal entries using AI. The 
 
 ### Unit 8: Milestone 2 (Build Sprint 1)
 - [x] Set up GitHub Project Board and Milestones
-- [x] Initialized Xcode project and Firebase authentication
-- [x] Created Login/Signup UI
+- [x] Initialized Xcode project and app folder structure
+- [x] Created Login/Signup UI and local authentication flow
+- [x] Built Home, Groups, Journal, and Profile screens
 - [x] Developed basic Journal Entry View
 
-**Progress Video/GIF:**
-> []
+**Progress Video/GIF:**  
+> [INSERT UNIT 8 VIDEO OR GIF LINK HERE]
 
 ### Unit 9: Milestone 3 (Build Sprint 2)
 - [ ] Integrate AI Image Generation API (DALL-E)
 - [ ] Implement image partitioning/slicing logic
 - [ ] Record Demo Day practice run
 
-**Demo Day Practice Video:**
-> []
+**Demo Day Practice Video:**  
+> [INSERT UNIT 9 DEMO VIDEO LINK HERE]
 
 ---
 
-## Schema 
+## Schema
 
 ### Models
+
 | Property | Type | Description |
 | :--- | :--- | :--- |
 | objectId | String | Unique id for the user post (default field) |
