@@ -84,7 +84,7 @@ An app that creates an image from multiple users' journal entries using AI. The 
 - [x] Developed basic Journal Entry View
 
 **Progress Video/GIF:**  
-> [INSERT UNIT 8 VIDEO OR GIF LINK HERE]
+> [https://drive.google.com/file/d/1vUUmEn8M2fRSfVQ23qmspgCBayaEfy7k/view?usp=sharing]
 
 ### Unit 9: Milestone 3 (Build Sprint 2)
 - [ ] Integrate AI Image Generation API (DALL-E)
