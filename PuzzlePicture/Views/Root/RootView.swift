@@ -6,8 +6,13 @@ struct RootView: View {
     var body: some View {
         Group {
             if authViewModel.isLoggedIn {
-                MainTabView()
-                    .environmentObject(authViewModel)
+                if authViewModel.isEmailVerified {
+                    MainTabView()
+                        .environmentObject(authViewModel)
+                } else {
+                    VerifyEmailView()
+                        .environmentObject(authViewModel)
+                }
             } else {
                 AuthView()
                     .environmentObject(authViewModel)

@@ -4,6 +4,8 @@ struct AuthView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
 
     @State private var isLoginMode = true
+    @State private var firstName = ""
+    @State private var lastName = ""
     @State private var email = ""
     @State private var password = ""
     @Namespace private var animation
@@ -13,103 +15,135 @@ struct AuthView: View {
         ZStack {
             GradientBackground()
 
-            VStack(spacing: 26) {
-                Spacer()
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 26) {
+                    Spacer(minLength: 40)
 
-                VStack(spacing: 14) {
-                    Image(systemName: "sparkles.rectangle.stack.fill")
-                        .font(.system(size: 58))
-                        .foregroundStyle(.white)
-                        .offset(y: floatIcon ? -6 : 6)
-                        .animation(.easeInOut(duration: 1.7).repeatForever(autoreverses: true), value: floatIcon)
+                    VStack(spacing: 14) {
+                        Image(systemName: "sparkles.rectangle.stack.fill")
+                            .font(.system(size: 58))
+                            .foregroundStyle(.white)
+                            .offset(y: floatIcon ? -6 : 6)
+                            .animation(.easeInOut(duration: 1.7).repeatForever(autoreverses: true), value: floatIcon)
 
-                    Text(AppText.appName)
-                        .font(AppFont.hero(40))
-                        .foregroundStyle(AppColors.textPrimary)
+                        Text(AppText.appName)
+                            .font(AppFont.hero(40))
+                            .foregroundStyle(AppColors.textPrimary)
 
-                    Text(AppText.tagline)
-                        .font(AppFont.body(16))
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(AppColors.textSecondary)
-                        .padding(.horizontal, 26)
-                }
+                        Text(AppText.tagline)
+                            .font(AppFont.body(16))
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(AppColors.textSecondary)
+                            .padding(.horizontal, 26)
+                    }
 
-                GlassCard {
-                    VStack(spacing: 20) {
-                        HStack(spacing: 8) {
-                            authTab(title: "Login", selected: isLoginMode) {
-                                withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
-                                    isLoginMode = true
-                                    authViewModel.errorMessage = ""
+                    GlassCard {
+                        VStack(spacing: 20) {
+                            HStack(spacing: 8) {
+                                authTab(title: "Login", selected: isLoginMode) {
+                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
+                                        isLoginMode = true
+                                        authViewModel.errorMessage = ""
+                                        authViewModel.infoMessage = ""
+                                    }
+                                }
+
+                                authTab(title: "Sign Up", selected: !isLoginMode) {
+                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
+                                        isLoginMode = false
+                                        authViewModel.errorMessage = ""
+                                        authViewModel.infoMessage = ""
+                                    }
+                                }
+                            }
+                            .padding(6)
+                            .background(.white.opacity(0.06))
+                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+
+                            VStack(spacing: 16) {
+                                if !isLoginMode {
+                                    HStack(spacing: 12) {
+                                        labeledField(title: "First Name", text: $firstName)
+                                        labeledField(title: "Last Name", text: $lastName)
+                                    }
+                                }
+
+                                labeledField(title: "Email", text: $email, keyboardType: .emailAddress, autoCapitalize: false)
+
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Password")
+                                        .font(AppFont.caption(13))
+                                        .foregroundStyle(AppColors.textSecondary)
+
+                                    SecureField("", text: $password)
+                                        .foregroundStyle(AppColors.textPrimary)
+                                        .padding()
+                                        .background(AppColors.softFill)
+                                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                                 }
                             }
 
-                            authTab(title: "Sign Up", selected: !isLoginMode) {
-                                withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
-                                    isLoginMode = false
-                                    authViewModel.errorMessage = ""
+                            PrimaryButton(
+                                title: isLoginMode ? "Log In" : "Create Account",
+                                icon: isLoginMode ? "arrow.right.circle.fill" : "person.badge.plus.fill"
+                            ) {
+                                if isLoginMode {
+                                    authViewModel.login(email: email, password: password)
+                                } else {
+                                    authViewModel.signUp(
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        email: email,
+                                        password: password
+                                    )
                                 }
                             }
-                        }
-                        .padding(6)
-                        .background(.white.opacity(0.06))
-                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
 
-                        VStack(spacing: 16) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Email")
-                                    .font(AppFont.caption(13))
+                            if !authViewModel.infoMessage.isEmpty {
+                                Text(authViewModel.infoMessage)
+                                    .font(AppFont.body(14))
                                     .foregroundStyle(AppColors.textSecondary)
-
-                                TextField("", text: $email)
-                                    .textInputAutocapitalization(.never)
-                                    .autocorrectionDisabled()
-                                    .keyboardType(.emailAddress)
-                                    .foregroundStyle(AppColors.textPrimary)
-                                    .padding()
-                                    .background(AppColors.softFill)
-                                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                                    .multilineTextAlignment(.center)
                             }
 
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Password")
-                                    .font(AppFont.caption(13))
-                                    .foregroundStyle(AppColors.textSecondary)
-
-                                SecureField("", text: $password)
-                                    .foregroundStyle(AppColors.textPrimary)
-                                    .padding()
-                                    .background(AppColors.softFill)
-                                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            if !authViewModel.errorMessage.isEmpty {
+                                Text(authViewModel.errorMessage)
+                                    .font(AppFont.caption(14))
+                                    .foregroundStyle(.red.opacity(0.95))
+                                    .multilineTextAlignment(.center)
                             }
-                        }
-
-                        PrimaryButton(
-                            title: isLoginMode ? "Let’s Go" : "Create Account",
-                            icon: isLoginMode ? "arrow.right.circle.fill" : "person.badge.plus.fill"
-                        ) {
-                            if isLoginMode {
-                                authViewModel.login(email: email, password: password)
-                            } else {
-                                authViewModel.signUp(email: email, password: password)
-                            }
-                        }
-
-                        if !authViewModel.errorMessage.isEmpty {
-                            Text(authViewModel.errorMessage)
-                                .font(AppFont.caption(14))
-                                .foregroundStyle(.red.opacity(0.95))
-                                .multilineTextAlignment(.center)
                         }
                     }
-                }
-                .padding(.horizontal, 20)
+                    .padding(.horizontal, 20)
 
-                Spacer()
+                    Spacer(minLength: 40)
+                }
             }
         }
         .onAppear {
             floatIcon = true
+        }
+    }
+
+    private func labeledField(
+        title: String,
+        text: Binding<String>,
+        keyboardType: UIKeyboardType = .default,
+        autoCapitalize: Bool = true
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(AppFont.caption(13))
+                .foregroundStyle(AppColors.textSecondary)
+
+            TextField("", text: text)
+                .textInputAutocapitalization(autoCapitalize ? .words : .never)
+                .autocorrectionDisabled()
+                .keyboardType(keyboardType)
+                .foregroundStyle(AppColors.textPrimary)
+                .padding()
+                .background(AppColors.softFill)
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
     }
 

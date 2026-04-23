@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct JournalEntryView: View {
-    @State private var journalText = ""
-    @State private var didSubmit = false
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @StateObject private var viewModel = JournalViewModel()
+
+    let sessionId = "demo_session"
+    let groupId = "demo_group"
 
     var body: some View {
         NavigationStack {
@@ -23,7 +26,7 @@ struct JournalEntryView: View {
 
                     GlassCard {
                         VStack(spacing: 16) {
-                            TextEditor(text: $journalText)
+                            TextEditor(text: $viewModel.journalText)
                                 .scrollContentBackground(.hidden)
                                 .padding(10)
                                 .frame(height: 280)
@@ -32,17 +35,35 @@ struct JournalEntryView: View {
                                 .foregroundStyle(AppColors.textPrimary)
                                 .font(AppFont.body(18))
 
-                            PrimaryButton(
-                                title: didSubmit ? "Entry Submitted" : "Submit Entry",
-                                icon: didSubmit ? "checkmark.circle.fill" : "arrow.up.circle.fill"
-                            ) {
-                                withAnimation(.spring(response: 0.35, dampingFraction: 0.72)) {
-                                    didSubmit = true
-                                }
+                            PrimaryButton(title: "Submit Entry", icon: "arrow.up.circle.fill") {
+                                viewModel.submit(
+                                    sessionId: sessionId,
+                                    groupId: groupId,
+                                    userId: authViewModel.currentUserId
+                                )
                             }
                         }
                     }
                     .padding(.horizontal)
+
+                    if !viewModel.submitMessage.isEmpty {
+                        Text(viewModel.submitMessage)
+                            .font(AppFont.body(15))
+                            .foregroundStyle(AppColors.textSecondary)
+                    }
+
+                    NavigationLink {
+                        SubmissionStatusView(groupId: groupId, sessionId: sessionId, totalMembers: 2)
+                    } label: {
+                        Text("View Submission Status")
+                            .font(AppFont.subtitle(17))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.accentBlueDark)
+                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            .padding(.horizontal)
+                    }
 
                     Spacer()
                 }
@@ -55,4 +76,5 @@ struct JournalEntryView: View {
 
 #Preview {
     JournalEntryView()
+        .environmentObject(AuthViewModel())
 }
