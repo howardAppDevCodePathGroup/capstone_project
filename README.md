@@ -335,3 +335,34 @@ For Demo Day, we plan to show:
 6. Open assembly mode
 7. Open session history and profile
 
+
+---
+
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    A[iOS App<br/>SwiftUI + MVVM] --> B[Firebase Authentication]
+    A --> C[Cloud Firestore]
+    A --> D[Firebase Functions Backend]
+    A --> E[Firebase Storage]
+
+    D --> F[Gemini / Vertex AI]
+    D --> C
+    D --> E
+
+    C --> G[Users]
+    C --> H[Groups]
+    C --> I[Sessions]
+    C --> J[Submissions]
+    C --> K[Puzzle Pieces]
+    C --> L[Personal Journals]
+    C --> M[Session History]
+
+    A --> N[Home / Groups / Journal / Profile]
+    A --> O[Submission Status]
+    A --> P[Final Reveal]
+    A --> Q[Full Artwork]
+    A --> R[Assembly Mode]
+
+
