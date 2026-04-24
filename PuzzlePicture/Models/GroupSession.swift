@@ -7,5 +7,6 @@ struct GroupSession: Identifiable, Codable {
     var inviteCode: String
     var ownerId: String
     var memberIds: [String]
+    var maxMembers: Int
     var currentSessionId: String
 }

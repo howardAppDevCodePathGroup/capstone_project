@@ -1,80 +1,132 @@
 import SwiftUI
+import PhotosUI
 
 struct JournalEntryView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    @StateObject private var viewModel = JournalViewModel()
+    @StateObject private var viewModel = PersonalJournalViewModel()
 
-    let sessionId = "demo_session"
-    let groupId = "demo_group"
+    @State private var selectedPhoto: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
             ZStack {
                 GradientBackground()
 
-                VStack(spacing: 18) {
-                    VStack(spacing: 8) {
-                        Text("How did today feel?")
-                            .font(AppFont.hero(32))
-                            .foregroundStyle(AppColors.textPrimary)
-
-                        Text("Your words help shape the group’s final image.")
-                            .font(AppFont.body(15))
-                            .foregroundStyle(AppColors.textSecondary)
-                            .multilineTextAlignment(.center)
-                    }
-
-                    GlassCard {
-                        VStack(spacing: 16) {
-                            TextEditor(text: $viewModel.journalText)
-                                .scrollContentBackground(.hidden)
-                                .padding(10)
-                                .frame(height: 280)
-                                .background(AppColors.softFill)
-                                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 18) {
+                        VStack(spacing: 8) {
+                            Text("Personal Journal")
+                                .font(AppFont.hero(32))
                                 .foregroundStyle(AppColors.textPrimary)
-                                .font(AppFont.body(18))
 
-                            PrimaryButton(title: "Submit Entry", icon: "arrow.up.circle.fill") {
-                                viewModel.submit(
-                                    sessionId: sessionId,
-                                    groupId: groupId,
-                                    userId: authViewModel.currentUserId
-                                )
+                            Text("This is your private journal. It is separate from puzzle submissions.")
+                                .font(AppFont.body(15))
+                                .foregroundStyle(AppColors.textSecondary)
+                                .multilineTextAlignment(.center)
+                        }
+
+                        GlassCard {
+                            VStack(spacing: 16) {
+                                TextField("Write your thoughts...", text: $viewModel.journalText, axis: .vertical)
+                                    .lineLimit(6...12)
+                                    .foregroundStyle(AppColors.textPrimary)
+                                    .padding()
+                                    .background(AppColors.softFill)
+                                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+
+                                if let image = viewModel.selectedImage {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 200)
+                                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                                }
+
+                                PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                                    Text("Attach Image")
+                                        .font(AppFont.subtitle(16))
+                                        .foregroundStyle(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(AppColors.accentBlueDark)
+                                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                                }
+
+                                PrimaryButton(
+                                    title: viewModel.isSaving ? "Saving..." : "Save Journal Entry",
+                                    icon: "square.and.arrow.down.fill"
+                                ) {
+                                    viewModel.saveEntry(userId: authViewModel.currentUserId)
+                                }
                             }
                         }
-                    }
-                    .padding(.horizontal)
+                        .padding(.horizontal)
 
-                    if !viewModel.submitMessage.isEmpty {
-                        Text(viewModel.submitMessage)
-                            .font(AppFont.body(15))
-                            .foregroundStyle(AppColors.textSecondary)
-                    }
+                        if !viewModel.statusMessage.isEmpty {
+                            Text(viewModel.statusMessage)
+                                .font(AppFont.body(14))
+                                .foregroundStyle(AppColors.textSecondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal)
+                        }
 
-                    NavigationLink {
-                        SubmissionStatusView(groupId: groupId, sessionId: sessionId, totalMembers: 2)
-                    } label: {
-                        Text("View Submission Status")
-                            .font(AppFont.subtitle(17))
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(AppColors.accentBlueDark)
-                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                            .padding(.horizontal)
-                    }
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Your Entries")
+                                .font(AppFont.title(24))
+                                .foregroundStyle(AppColors.textPrimary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Spacer()
+                            ForEach(viewModel.entries) { entry in
+                                GlassCard {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        Text(entry.text)
+                                            .font(AppFont.body(15))
+                                            .foregroundStyle(AppColors.textPrimary)
+
+                                        if !entry.imageURL.isEmpty {
+                                            AsyncImage(url: URL(string: entry.imageURL)) { phase in
+                                                switch phase {
+                                                case .success(let image):
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(maxHeight: 220)
+                                                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                                default:
+                                                    EmptyView()
+                                                }
+                                            }
+                                        }
+
+                                        Text(entry.createdAt.formatted(date: .abbreviated, time: .shortened))
+                                            .font(AppFont.caption(12))
+                                            .foregroundStyle(AppColors.textMuted)
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.top, 10)
+                    .padding(.bottom, 30)
                 }
-                .padding(.top, 10)
             }
             .navigationTitle("Journal")
+            .onAppear {
+                viewModel.startListening(userId: authViewModel.currentUserId)
+            }
+            .onDisappear {
+                viewModel.stopListening()
+            }
+            .onChange(of: selectedPhoto) {
+                Task {
+                    guard let item = selectedPhoto else { return }
+                    if let data = try? await item.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data) {
+                        viewModel.selectedImage = image
+                    }
+                }
+            }
         }
     }
-}
-
-#Preview {
-    JournalEntryView()
-        .environmentObject(AuthViewModel())
 }

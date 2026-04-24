@@ -8,33 +8,18 @@ struct GlassCard<Content: View>: View {
     }
 
     var body: some View {
-        content
-            .padding(18)
-            .background(
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .fill(AppColors.card)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .stroke(AppColors.cardBorder, lineWidth: 1)
-            )
-            .shadow(color: .black.opacity(0.16), radius: 18, x: 0, y: 10)
-    }
-}
-
-#Preview {
-    ZStack {
-        GradientBackground()
-        GlassCard {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Preview Card")
-                    .font(AppFont.title(22))
-                    .foregroundStyle(AppColors.textPrimary)
-                Text("Premium glass card")
-                    .font(AppFont.body(15))
-                    .foregroundStyle(AppColors.textSecondary)
-            }
+        VStack {
+            content
         }
-        .padding()
+        .padding(18)
+        .background(
+            RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous)
+                .fill(AppColors.cardFill)
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous)
+                        .stroke(AppColors.stroke, lineWidth: 1)
+                )
+        )
+        .shadow(color: AppColors.shadow, radius: 22, x: 0, y: 12)
     }
 }

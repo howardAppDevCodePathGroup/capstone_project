@@ -2,17 +2,28 @@ import SwiftUI
 
 struct PrimaryButton: View {
     let title: String
-    var icon: String? = nil
+    let icon: String?
+    let isDisabled: Bool
     let action: () -> Void
 
-    @State private var isPressed = false
+    init(
+        title: String,
+        icon: String? = nil,
+        isDisabled: Bool = false,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.icon = icon
+        self.isDisabled = isDisabled
+        self.action = action
+    }
 
     var body: some View {
         Button(action: action) {
             HStack(spacing: 10) {
                 if let icon {
                     Image(systemName: icon)
-                        .font(.headline)
+                        .font(.system(size: 17, weight: .bold))
                 }
 
                 Text(title)
@@ -22,33 +33,12 @@ struct PrimaryButton: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .background(
-                LinearGradient(
-                    colors: [AppColors.accentBlueDark, AppColors.accentBlue],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
+                RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
+                    .fill(AppGradients.primaryButton)
+                    .opacity(isDisabled ? 0.45 : 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(.white.opacity(0.13), lineWidth: 1)
-            )
-            .shadow(color: AppColors.accentBlue.opacity(0.22), radius: 10, x: 0, y: 6)
-            .scaleEffect(isPressed ? 0.98 : 1)
-            .animation(.spring(response: 0.24, dampingFraction: 0.72), value: isPressed)
+            .shadow(color: AppColors.accentBlue.opacity(0.25), radius: 12, x: 0, y: 8)
         }
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in isPressed = true }
-                .onEnded { _ in isPressed = false }
-        )
-    }
-}
-
-#Preview {
-    ZStack {
-        GradientBackground()
-        PrimaryButton(title: "Continue", icon: "arrow.right.circle.fill") { }
-            .padding()
+        .disabled(isDisabled)
     }
 }
