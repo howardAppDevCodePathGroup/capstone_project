@@ -148,7 +148,7 @@ Puzzle Picture is a collaborative journaling and creativity app where multiple u
 - [x] Updated repo and README with current sprint progress
 
 **Build Progress / Demo Video:**  
-> [PASTE UNIT 9 DEMO VIDEO LINK HERE]
+> [https://drive.google.com/file/d/1eH8p7JjES0JtfzNIN4YOR6kMk7VIr1q4/view?usp=sharing]
 
 ---
 
