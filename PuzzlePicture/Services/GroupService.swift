@@ -248,4 +248,29 @@ final class GroupService {
             completion(.success(memberIds))
         }
     }
+    
+    func fetchMemberCount(
+        groupId: String,
+        completion: @escaping (Result<(memberCount: Int, maxMembers: Int), Error>) -> Void
+    ) {
+        db.collection("groups").document(groupId).getDocument { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = snapshot?.data() else {
+                completion(.success((memberCount: 0, maxMembers: 0)))
+                return
+            }
+
+            let memberIds = data["memberIds"] as? [String] ?? []
+            let maxMembers = data["maxMembers"] as? Int ?? 0
+
+            completion(.success((
+                memberCount: memberIds.count,
+                maxMembers: maxMembers
+            )))
+        }
+    }
 }
